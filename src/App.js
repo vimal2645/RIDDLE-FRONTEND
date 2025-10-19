@@ -31,10 +31,6 @@ function App() {
   const [roomName, setRoomName] = useState('');
   const [riddleCount, setRiddleCount] = useState(0);
 
-  const axiosConfig = {
-    headers: { Authorization: `Bearer ${token}` }
-  };
-
   const initializeUnityAds = () => {
     if (window.unityads) {
       window.unityads.initialize(UNITY_GAME_ID, true);
@@ -69,6 +65,7 @@ function App() {
   };
 
   const fetchProfile = useCallback(async () => {
+    const axiosConfig = { headers: { Authorization: `Bearer ${token}` } };
     try {
       const response = await axios.get(`${API_URL}/profile`, axiosConfig);
       setUser(response.data);
@@ -91,14 +88,15 @@ function App() {
     setMessage('');
     setAnswer('');
     try {
+      const axiosConfig = { headers: { Authorization: `Bearer ${token}` } };
       const params = { language };
       if (category) params.category = category;
       const response = await axios.get(`${API_URL}/riddle`, {
         ...axiosConfig,
-        params
+        params,
       });
       setRiddle(response.data);
-      setRiddleCount(prev => prev + 1);
+      setRiddleCount((prev) => prev + 1);
       if (riddleCount > 0 && riddleCount % 3 === 0) {
         setTimeout(() => showInterstitialAd(), 1000);
       }
@@ -115,6 +113,7 @@ function App() {
     }
     setLoading(true);
     try {
+      const axiosConfig = { headers: { Authorization: `Bearer ${token}` } };
       const response = await axios.post(
         `${API_URL}/check`,
         { riddle_id: riddle.id, answer },
@@ -141,6 +140,7 @@ function App() {
   };
 
   const fetchDailyChallenge = useCallback(async () => {
+    const axiosConfig = { headers: { Authorization: `Bearer ${token}` } };
     try {
       const response = await axios.get(`${API_URL}/daily-challenge`, axiosConfig);
       setDailyChallenge(response.data);
@@ -153,6 +153,7 @@ function App() {
     if (!answer.trim()) return;
     setLoading(true);
     try {
+      const axiosConfig = { headers: { Authorization: `Bearer ${token}` } };
       const response = await axios.post(
         `${API_URL}/daily-challenge/answer`,
         { answer },
@@ -178,6 +179,7 @@ function App() {
 
   const createRoom = async () => {
     if (!roomName.trim()) return;
+    const axiosConfig = { headers: { Authorization: `Bearer ${token}` } };
     try {
       const response = await axios.post(
         `${API_URL}/multiplayer/create`,
@@ -193,6 +195,7 @@ function App() {
   };
 
   const joinRoom = async (roomId) => {
+    const axiosConfig = { headers: { Authorization: `Bearer ${token}` } };
     try {
       const response = await axios.post(
         `${API_URL}/multiplayer/join`,
@@ -207,6 +210,7 @@ function App() {
 
   const shareRiddle = async () => {
     if (!riddle) return;
+    const axiosConfig = { headers: { Authorization: `Bearer ${token}` } };
     try {
       await axios.post(
         `${API_URL}/share`,
@@ -283,7 +287,7 @@ function App() {
                 type="text"
                 placeholder="Username"
                 value={username}
-                onChange={e => setUsername(e.target.value)}
+                onChange={(e) => setUsername(e.target.value)}
                 required
               />
             )}
@@ -291,18 +295,18 @@ function App() {
               type="email"
               placeholder="Email"
               value={email}
-              onChange={e => setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
             <input
               type="password"
               placeholder="Password"
               value={password}
-              onChange={e => setPassword(e.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
             {!isLogin && (
-              <select value={language} onChange={e => setLanguage(e.target.value)}>
+              <select value={language} onChange={(e) => setLanguage(e.target.value)}>
                 <option value="en">English</option>
                 <option value="hi">हिंदी</option>
               </select>
@@ -344,13 +348,13 @@ function App() {
       {activeTab === 'riddle' && (
         <div className="container">
           <div className="controls">
-            <select value={language} onChange={e => setLanguage(e.target.value)}>
+            <select value={language} onChange={(e) => setLanguage(e.target.value)}>
               <option value="en">English</option>
               <option value="hi">हिंदी</option>
             </select>
-            <select value={category} onChange={e => setCategory(e.target.value)}>
+            <select value={category} onChange={(e) => setCategory(e.target.value)}>
               <option value="">All Categories</option>
-              {categories.map(cat => (
+              {categories.map((cat) => (
                 <option key={cat.name} value={cat.name}>
                   {cat.name} ({cat.count})
                 </option>
@@ -360,7 +364,6 @@ function App() {
               {riddle ? 'Next Riddle' : 'Start'}
             </button>
           </div>
-
           {riddle && (
             <div className="riddle-card">
               <div className="riddle-header">
@@ -373,8 +376,8 @@ function App() {
                   type="text"
                   placeholder="Your answer..."
                   value={answer}
-                  onChange={e => setAnswer(e.target.value)}
-                  onKeyPress={e => e.key === 'Enter' && checkAnswer()}
+                  onChange={(e) => setAnswer(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && checkAnswer()}
                 />
                 <button onClick={checkAnswer} disabled={loading}>
                   Submit
@@ -393,7 +396,7 @@ function App() {
                     borderRadius: '5px',
                     cursor: 'pointer',
                     fontSize: '14px',
-                    marginLeft: '10px'
+                    marginLeft: '10px',
                   }}
                 >
                   🎬 Watch Ad for Hint
@@ -423,8 +426,8 @@ function App() {
                     type="text"
                     placeholder="Your answer..."
                     value={answer}
-                    onChange={e => setAnswer(e.target.value)}
-                    onKeyPress={e => e.key === 'Enter' && answerDailyChallenge()}
+                    onChange={(e) => setAnswer(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && answerDailyChallenge()}
                   />
                   <button onClick={answerDailyChallenge} disabled={loading}>
                     Submit
@@ -462,12 +465,12 @@ function App() {
               type="text"
               placeholder="Room name..."
               value={roomName}
-              onChange={e => setRoomName(e.target.value)}
+              onChange={(e) => setRoomName(e.target.value)}
             />
             <button onClick={createRoom}>Create Room</button>
           </div>
           <div className="rooms-list">
-            {rooms.map(room => (
+            {rooms.map((room) => (
               <div key={room.room_id} className="room-card">
                 <h3>{room.name}</h3>
                 <p>Host: {room.host}</p>
