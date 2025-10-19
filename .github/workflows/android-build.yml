@@ -19,11 +19,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./frontend  # Change if your frontend is inside a subfolder
+        working-directory: ./frontend  # Change if your frontend folder is different
 
       - name: Build React app
         run: npm run build
-        working-directory: ./frontend  # Change as appropriate
+        working-directory: ./frontend  # Change accordingly
 
       - name: Install Java JDK 17
         uses: actions/setup-java@v3
@@ -53,10 +53,10 @@ jobs:
 
       - name: Build Android APK
         run: ./gradlew assembleRelease
-        working-directory: ./frontend/android  # Update path if android folder location differs
+        working-directory: ./frontend/android  # Adjust if your android folder path is different
 
       - name: Upload APK Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: app-release.apk
           path: ./frontend/android/app/build/outputs/apk/release/app-release.apk
