@@ -3,7 +3,7 @@ name: Android Build
 on:
   push:
     branches:
-      - main  # replace with your default branch if different
+      - main  # change if your default branch is different
 
 jobs:
   build:
@@ -47,6 +47,9 @@ jobs:
         run: |
           npx cap sync android
           npx cap copy android
+
+      - name: Make gradlew executable
+        run: chmod +x ./android/gradlew
 
       - name: Build Android APK
         run: ./gradlew assembleRelease
