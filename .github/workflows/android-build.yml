@@ -3,7 +3,7 @@ name: Android Build
 on:
   push:
     branches:
-      - main  # change if your default branch is different
+      - main  # Change if your default branch is different
 
 jobs:
   build:
@@ -43,7 +43,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle', '**/gradle-wrapper.properties') }}
           restore-keys: ${{ runner.os }}-gradle-
 
-      - name: Sync Capacitor and copy build
+      - name: Sync Capacitor and Copy build files
         run: |
           npx cap sync android
           npx cap copy android
@@ -54,6 +54,9 @@ jobs:
       - name: Build Android APK
         run: ./gradlew assembleRelease
         working-directory: ./android
+
+      - name: List APK files generated
+        run: ls -lh ./android/app/build/outputs/apk/release
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
